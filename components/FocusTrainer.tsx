@@ -8,25 +8,24 @@ type Phase =
   | "hold"
   | "release"
   | "success"
-  | "fail"
-  | "complete";
+  | "fail";
 
 function getDelayForLevel(level: number) {
-  if (level <= 1) return 2200;
-  if (level === 2) return 1900;
-  if (level === 3) return 1600;
-  if (level === 4) return 1350;
-  if (level === 5) return 1150;
-  return Math.max(650, 1100 - (level - 5) * 65);
+  if (level <= 1) return 2600;
+  if (level === 2) return 2300;
+  if (level === 3) return 2000;
+  if (level === 4) return 1750;
+  if (level === 5) return 1500;
+  return Math.max(850, 1450 - (level - 5) * 55);
 }
 
 function getWindowForLevel(level: number) {
-  if (level <= 1) return 900;
-  if (level === 2) return 750;
-  if (level === 3) return 650;
-  if (level === 4) return 540;
-  if (level === 5) return 460;
-  return Math.max(260, 430 - (level - 5) * 18);
+  if (level <= 1) return 1200;
+  if (level === 2) return 1000;
+  if (level === 3) return 850;
+  if (level === 4) return 720;
+  if (level === 5) return 620;
+  return Math.max(320, 580 - (level - 5) * 16);
 }
 
 function getStateLabel(score: number) {
@@ -64,6 +63,12 @@ export default function FocusTrainer() {
     intervalRef.current = null;
   };
 
+  const buzz = (ms: number) => {
+    if (typeof navigator !== "undefined" && "vibrate" in navigator) {
+      navigator.vibrate(ms);
+    }
+  };
+
   useEffect(() => {
     return () => {
       mountedRef.current = false;
@@ -96,37 +101,39 @@ export default function FocusTrainer() {
     timeoutRef.current = setTimeout(() => {
       if (!mountedRef.current) return;
       beginCycle(nextLevel);
-    }, 900);
+    }, 950);
   };
 
   const beginReleasePhase = (currentLevel: number) => {
     const windowMs = getWindowForLevel(currentLevel);
-    const randomJitter = Math.floor(Math.random() * 240) - 120;
+    const randomJitter = Math.floor(Math.random() * 160) - 80;
 
     setPhase("release");
     setInstruction("RELEASE");
-    setFeedback("Lift immediately when commanded.");
+    setFeedback("Lift now.");
     activeWindowRef.current = true;
     expectedActionRef.current = "release";
     awaitingResultRef.current = true;
+    buzz(120);
 
     timeoutRef.current = setTimeout(() => {
       if (!mountedRef.current || !awaitingResultRef.current) return;
       endRun("Too Slow", "You held past the release command.");
-    }, Math.max(220, windowMs + randomJitter));
+    }, Math.max(300, windowMs + randomJitter));
   };
 
   const beginHoldPhase = (currentLevel: number) => {
     const delayMs = getDelayForLevel(currentLevel);
-    const randomJitter = Math.floor(Math.random() * 500) - 250;
-    const effectiveDelay = Math.max(500, delayMs + randomJitter);
+    const randomJitter = Math.floor(Math.random() * 450) - 225;
+    const effectiveDelay = Math.max(700, delayMs + randomJitter);
 
     setPhase("hold");
     setInstruction("HOLD");
-    setFeedback("Press and hold with steady intent.");
+    setFeedback("Press and stay steady.");
     activeWindowRef.current = true;
     expectedActionRef.current = "press";
     awaitingResultRef.current = true;
+    buzz(40);
 
     timeoutRef.current = setTimeout(() => {
       if (!mountedRef.current || !awaitingResultRef.current) return;
@@ -158,7 +165,7 @@ export default function FocusTrainer() {
         clearTimers();
         beginHoldPhase(currentLevel);
       }
-    }, 450);
+    }, 500);
   };
 
   const startTrial = () => {
@@ -197,12 +204,12 @@ export default function FocusTrainer() {
       activeWindowRef.current = false;
       expectedActionRef.current = null;
       awaitingResultRef.current = false;
-      setFeedback("Hold maintained. Await the release command.");
+      setFeedback("Good. Stay steady.");
 
       timeoutRef.current = setTimeout(() => {
         if (!mountedRef.current) return;
         beginReleasePhase(level);
-      }, 700 + Math.floor(Math.random() * 450));
+      }, 900 + Math.floor(Math.random() * 500));
     }
   };
 
@@ -230,6 +237,14 @@ export default function FocusTrainer() {
   };
 
   const focusState = getStateLabel(score);
+  const orbCenterText =
+    phase === "hold"
+      ? "HOLD"
+      : phase === "release"
+      ? "RELEASE"
+      : holding
+      ? "HOLDING"
+      : "READY";
 
   return (
     <section className="trainer-shell">
@@ -267,7 +282,7 @@ export default function FocusTrainer() {
           <div className="orb-ring orb-ring-2" />
           <div className="orb-ring orb-ring-3" />
           <div className="orb-core" />
-          <div className="orb-text">{holding ? "HOLDING" : "READY"}</div>
+          <div className="orb-text">{orbCenterText}</div>
         </div>
 
         <div className="stats-grid">
@@ -296,9 +311,8 @@ export default function FocusTrainer() {
         </div>
 
         <p className="hint">
-          Press when told to <strong>HOLD</strong>. Lift instantly on{" "}
-          <strong>RELEASE</strong>. Each cleared cycle makes the next one less
-          forgiving.
+          Press on <strong>HOLD</strong>. Lift instantly on{" "}
+          <strong>RELEASE</strong>. The orb now changes color and vibrates on release.
         </p>
       </div>
     </section>
