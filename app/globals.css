@@ -143,8 +143,9 @@ body {
 }
 
 .phase-release {
-  color: #fff0a8;
-  text-shadow: 0 0 18px rgba(255, 230, 90, 0.25);
+  color: #ffe27a;
+  text-shadow: 0 0 18px rgba(255, 226, 122, 0.35);
+  animation: releaseFlash 0.55s ease-in-out infinite;
 }
 
 .phase-fail {
@@ -193,7 +194,8 @@ body {
     0 0 90px rgba(0, 125, 255, 0.1),
     inset 0 0 30px rgba(122, 244, 255, 0.08);
   animation: orbBreath 4.5s ease-in-out infinite;
-  transition: transform 160ms ease, box-shadow 160ms ease, filter 160ms ease;
+  transition: transform 160ms ease, box-shadow 160ms ease, filter 160ms ease,
+    background 160ms ease;
 }
 
 .focus-orb.running {
@@ -216,10 +218,14 @@ body {
 }
 
 .focus-orb.state-release {
+  transform: scale(0.9);
   box-shadow:
-    0 0 26px rgba(255, 219, 88, 0.42),
-    0 0 100px rgba(255, 196, 0, 0.12),
-    inset 0 0 34px rgba(255, 239, 168, 0.12);
+    0 0 26px rgba(255, 219, 88, 0.5),
+    0 0 100px rgba(255, 196, 0, 0.16),
+    inset 0 0 34px rgba(255, 239, 168, 0.18);
+  background:
+    radial-gradient(circle at 35% 30%, rgba(255, 248, 190, 0.95), transparent 18%),
+    radial-gradient(circle at center, rgba(255, 214, 92, 0.2), rgba(92, 54, 0, 0.45) 58%, rgba(2, 7, 17, 0.96) 78%);
 }
 
 .focus-orb.state-fail {
@@ -266,6 +272,14 @@ body {
   box-shadow:
     0 0 30px rgba(162, 250, 255, 0.72),
     0 0 70px rgba(0, 229, 255, 0.2);
+  transition: background 160ms ease, box-shadow 160ms ease;
+}
+
+.focus-orb.state-release .orb-core {
+  background: radial-gradient(circle, #fff8d9 0%, #ffe27a 45%, #ffb300 100%);
+  box-shadow:
+    0 0 30px rgba(255, 228, 120, 0.75),
+    0 0 70px rgba(255, 196, 0, 0.24);
 }
 
 .orb-text {
@@ -275,6 +289,12 @@ body {
   letter-spacing: 0.28em;
   text-transform: uppercase;
   color: rgba(238, 250, 255, 0.74);
+  transition: color 160ms ease, text-shadow 160ms ease;
+}
+
+.focus-orb.state-release .orb-text {
+  color: #fff6c0;
+  text-shadow: 0 0 12px rgba(255, 224, 100, 0.45);
 }
 
 .stats-grid {
@@ -360,6 +380,18 @@ body {
   }
   to {
     transform: rotate(360deg) scale(1.01);
+  }
+}
+
+@keyframes releaseFlash {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.72;
+    transform: scale(1.04);
   }
 }
 
