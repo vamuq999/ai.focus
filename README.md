@@ -1,142 +1,94 @@
-AI Focus
+# AI Focus
 
-AI Focus is a minimalist web application that measures the stability of your attention through touch interaction.
+**AI Focus** is a minimalist attention-training dApp built around a simple challenge:
 
-Instead of tracking time or tasks, AI Focus evaluates how steady your focus signal is. By holding your finger or cursor on the Focus Orb, the system analyzes micro-movements and calculates a Focus Score.
+**Hold when instructed. Release on command. Stay calm as the sequence accelerates.**
 
-The steadier your interaction, the stronger your focus signal.
-
----
-
-Concept
-
-Most productivity tools measure time spent working.
-
-AI Focus measures something different:
-
-attention stability.
-
-When the user presses and holds the orb, the system measures movement jitter.
-Low jitter = higher focus signal.
-
-This transforms focus into a skill-based interaction rather than a timer.
+Instead of measuring focus with a passive timer, AI Focus turns attention into an active skill loop using reaction timing, control, and rising difficulty.
 
 ---
 
-How It Works
+## Concept
 
-1. Press and hold the Focus Orb
-2. Maintain a steady touch
-3. Release to generate your Focus Score
+AI Focus is designed as a **focus trial**.
 
-Example result:
+The system gives commands:
 
-Focus Score: 88%
-State: Deep Focus
+- **HOLD**
+- **RELEASE**
 
-If movement becomes unstable:
+The player must respond correctly and maintain composure as timing windows become tighter with each cleared cycle.
 
-Focus Score: 41%
-State: Distracted
+This transforms focus from a vague idea into something interactive, measurable, and repeatable.
 
 ---
 
-Focus States
+## Core Loop
 
-Score| State
-0–30| Distracted
-31–60| Settling
-61–80| Focused
-81–100| Deep Focus
-
-These states help visualize the quality of attention during the interaction.
-
----
-
-Interface
-
-AI Focus intentionally uses a single-screen design.
-
-Elements include:
-
-- Breathing Focus Orb
-- Live interaction signal
-- Focus score output
-- Attention state indicator
-
-The goal is to keep the experience calm, fast, and frictionless.
+1. Start the trial
+2. Wait for the command
+3. Press and hold on **HOLD**
+4. Lift on **RELEASE**
+5. Survive longer as the sequence becomes less forgiving
+6. Build score, streak, and level
 
 ---
 
-Tech Stack
+## Features
 
-- Next.js 14
+- Single-screen focus training experience
+- Dynamic **HOLD / RELEASE** instruction loop
+- Increasing difficulty by level
+- Focus score tracking
+- Streak counter
+- State labels like:
+  - Scattered
+  - Distracted
+  - Building
+  - Focused
+  - Deep Focus
+- Animated breathing orb interface
+- Mobile-friendly interaction design
+
+---
+
+## Why It Works
+
+Most focus tools track:
+
+- time spent
+- task duration
+- pomodoro cycles
+
+AI Focus tracks something more immediate:
+
+- response discipline
+- control under pressure
+- steadiness of attention
+
+It is part reflex trainer, part focus ritual, part performance loop.
+
+---
+
+## Tech Stack
+
+- Next.js 14+
 - React
-- Pointer event tracking
-- CSS animation
+- TypeScript
+- CSS animations
+- Vercel deployment
 
-No backend services or APIs are required for the initial version.
+No backend is required for the MVP.
 
 ---
 
-Project Structure
+## Project Structure
 
+```text
 app/
   layout.tsx
   page.tsx
   globals.css
 
 components/
-  FocusOrb.tsx
-
----
-
-Deployment
-
-AI Focus is designed for instant deployment on Vercel.
-
-1. Push the repository to GitHub
-2. Import the repo into Vercel
-3. Deploy
-
-Example:
-
-https://aifocus.vercel.app
-
----
-
-Philosophy
-
-AI Focus treats attention as a signal rather than a schedule.
-
-Instead of forcing productivity, the app invites users to observe and strengthen their ability to maintain steady focus.
-
-Small improvements in stability can lead to stronger concentration during deep work sessions.
-
----
-
-Part of the Voltara Ecosystem
-
-AI Focus is one of several lightweight tools inside Voltara City, a hub of experimental applications designed to explore human–AI interaction.
-
-Other districts include:
-
-- BullFinderPro
-- Voltara Oracle
-- GaiaGauge
-- Sanctuary Sprint
-- AI Stabilizer
-
-Each tool focuses on a different signal: intelligence, sentiment, focus, balance, and creation.
-
----
-
-License
-
-Open experimental project.
-
-Use, modify, and explore freely.
-
----
-
-Built as part of an ongoing exploration into attention, interaction, and digital equilibrium.
+  FocusTrainer.tsx
